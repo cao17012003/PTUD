@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh bạ</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-position: center;
+        background-size: cover;
+      }
+
+      .container {
+        width: 400px;
+        height: auto;
+        min-height: 400px;
+        padding: 30px;
+        background: transparent;
+        border: 2px solid #e6b7eca1;
+        border-radius: 10px;
+        backdrop-filter: blur(15px);
+        width: 500px; /* Tăng kích thước container */
+        font-size: 20px; /* Tăng kích thước font chữ */
+      }
+
+      h1 {
+        color: #eee;
+        text-align: center;
+        margin-bottom: 36px;
+      }
+
+      .input-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+      }
+
+      .todo-input {
+        flex: 1;
+        outline: none;
+        padding: 10px 10px 10px 20px;
+        background-color: transparent;
+        border: 2px solid #e6b7eca1;
+        border-radius: 30px;
+        color: #eee;
+        margin-right: 10px;
+        font-size: 18px; /* Tăng kích thước chữ cho input */
+      }
+
+      .todo-input::placeholder {
+        color: #bfbfbf;
+      }
+
+      .add-button {
+        border: none;
+        outline: none;
+        background: #e6b7eca1;
+        color: #fff;
+        font-size: 35px;
+        cursor: pointer;
+        border-radius: 40px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .empty-image {
+        margin: 65px auto 0; /* Điều chỉnh vị trí margin-top */
+        display: block;
+      }
+
+      .todo {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #463c7b;
+        border-radius: 5px;
+        margin: 10px 0;
+        padding: 14px 16px; /* Điều chỉnh padding cho mỗi todo */
+        border: 2px solid #e6b7eca1;
+        transition: all 0.2s ease;
+      }
+
+      .todo:first-child {
+        margin-top: 0;
+      }
+
+      .todo:last-child {
+        margin-bottom: 0;
+      }
+
+      .todo:hover {
+        background-color: #e6b7eca1;
+      }
+
+      .todo label {
+        cursor: pointer;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        font-family: "Roboto", sans-serif;
+        color: #eee;
+        font-size: 20px; /* Tăng kích thước chữ cho label */
+      }
+
+      .todo span {
+        padding-left: 20px;
+        position: relative;
+        cursor: pointer;
+        font-size: 20px; /* Tăng kích thước chữ cho span */
+      }
+
+      /* span::before {
+      content: "";
+      height: 20px;
+      width: 20px;
+      position: absolute;
+      margin-left: -30px;
+      border-radius: 100px;
+      border: 2px solid #e6b7eca1;
+    } */
+
+      input[type="checkbox"] {
+        visibility: hidden;
+      }
+
+      /* input:checked + span {
+      text-decoration: line-through
+    } */
+
+      .todo:hover input:checked + span::before,
+      input:checked + span::before {
+        background: url(./check.svg) 50% 50% no-repeat #09bb21;
+        border-color: #09bb21;
+      }
+
+      .todo:hover span::before {
+        border-color: #eee;
+      }
+
+      .todo .delete-btn {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: #eee;
+        font-size: 24px;
+      }
+
+      .todos-container {
+        height: 300px;
+        overflow: overlay;
+      }
+
+      .todos-container::-webkit-scrollbar-track {
+        background: rgb(247, 247, 247);
+        border-radius: 20px;
+      }
+
+      .todos-container::-webkit-scrollbar {
+        width: 0;
+      }
+
+      .todos-container:hover::-webkit-scrollbar {
+        width: 7px;
+      }
+
+      .todos-container::-webkit-scrollbar-thumb {
+        background: #d5d5d5;
+        border-radius: 20px;
+      }
+
+      .filters {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+      }
+
+      .filter {
+        color: #eee;
+        padding: 5px 15px;
+        border-radius: 100px;
+        border: 2px solid #e6b7eca1;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .filter.active,
+      .filter:hover {
+        background-color: #e6b7eca1;
+      }
+
+      .delete-all {
+        display: flex;
+        color: #eee;
+        padding: 7px 15px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .delete-all:hover {
+        border-radius: 5px;
+        background-color: #e6b7eca1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Danh bạ</h1>
+      <div class="input-container">
+        <input class="todo-input" id="nameInput" placeholder="Nhập tên..." />
+      </div>
+      <div class="input-container">
+        <input
+          class="todo-input"
+          id="phoneInput"
+          placeholder="Nhập số điện thoại..."
+        />
+      </div>
+      <div class="input-container">
+        <button class="add-button">
+          <i class="fa fa-plus-circle"></i>
+        </button>
+      </div>
+      <div class="todos-container">
+        <ul class="todos"></ul>
+        <img class="empty-image" src="" />
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const input = document.querySelector("input#nameInput");
+        const phoneInput = document.querySelector("input#phoneInput");
+        const addButton = document.querySelector(".add-button");
+        const todosHtml = document.querySelector(".todos");
+        const emptyImage = document.querySelector(".empty-image");
+        let todosJson = JSON.parse(localStorage.getItem("todos")) || [];
+        const deleteAllButton = document.querySelector(".delete-all");
+        const filters = document.querySelectorAll(".filter");
+        let filter = "";
+
+        showTodos();
+
+        function getTodoHtml(todo, index) {
+          if (filter && filter != todo.status) {
+            return "";
+          }
+          let checked = todo.status == "completed" ? "checked" : "";
+          return /* html */ `
+              <li class="todo">
+                <label for="${index}">
+                  <input id="${index}" onclick="updateStatus(this)" type="checkbox" ${checked}>
+                  <span class="todo-name ${checked}" data-index="${index}" data-phone="${todo.phone}">${todo.name}</span>
+                </label>
+                <button class="delete-btn" data-index="${index}" onclick="remove(this)"><i class="fa fa-times"></i></button>
+                <button class="edit-btn" data-index="${index}" onclick="editContact(this)"><i class="fa fa-pencil"></i></button>
+              </li>
+            `;
+        }
+
+        function showTodos() {
+          if (todosJson.length == 0) {
+            todosHtml.innerHTML = "";
+            emptyImage.style.display = "block";
+          } else {
+            todosHtml.innerHTML = todosJson.map(getTodoHtml).join("");
+            emptyImage.style.display = "none";
+          }
+        }
+
+        function addTodo() {
+          let name = input.value.trim();
+          let phone = phoneInput.value.trim();
+          if (!name || !phone) {
+            return;
+          }
+          input.value = "";
+          phoneInput.value = "";
+          todosJson.unshift({ name: name, phone: phone, status: "pending" });
+          localStorage.setItem("todos", JSON.stringify(todosJson));
+          showTodos();
+        }
+
+        input.addEventListener("keyup", (e) => {
+          if (e.key != "Enter") {
+            return;
+          }
+          addTodo();
+        });
+
+        phoneInput.addEventListener("keyup", (e) => {
+          if (e.key != "Enter") {
+            return;
+          }
+          addTodo();
+        });
+
+        addButton.addEventListener("click", () => {
+          addTodo();
+        });
+
+        function updateStatus(todo) {
+          let todoName = todo.parentElement.querySelector(".todo-name");
+          if (todo.checked) {
+            todoName.classList.add("checked");
+            todosJson[todo.id].status = "completed";
+          } else {
+            todoName.classList.remove("checked");
+            todosJson[todo.id].status = "pending";
+          }
+          localStorage.setItem("todos", JSON.stringify(todosJson));
+        }
+
+        function remove(button) {
+          const index = button.dataset.index;
+          todosJson.splice(index, 1);
+          showTodos();
+          localStorage.setItem("todos", JSON.stringify(todosJson));
+        }
+
+        function editContact(button) {
+          const index = button.dataset.index;
+          const newName = prompt("Nhập tên mới:", todosJson[index].name);
+          const newPhone = prompt(
+            "Nhập số điện thoại mới:",
+            todosJson[index].phone
+          );
+          if (newName !== null && newPhone !== null) {
+            todosJson[index].name = newName.trim();
+            todosJson[index].phone = newPhone.trim();
+            localStorage.setItem("todos", JSON.stringify(todosJson));
+            showTodos();
+          }
+        }
+
+        filters.forEach(function (el) {
+          el.addEventListener("click", (e) => {
+            if (el.classList.contains("active")) {
+              el.classList.remove("active");
+              filter = "";
+            } else {
+              filters.forEach((tag) => tag.classList.remove("active"));
+              el.classList.add("active");
+              filter = e.target.dataset.filter;
+            }
+            showTodos();
+          });
+        });
+
+        todosHtml.addEventListener("click", (e) => {
+          if (e.target.classList.contains("todo-name")) {
+            const phone = e.target.dataset.phone;
+            if (phone) {
+              alert("Số điện thoại: " + phone);
+            }
+          }
+        });
+
+        deleteAllButton.addEventListener("click", () => {
+          todosJson = [];
+          localStorage.setItem("todos", JSON.stringify(todosJson));
+          showTodos();
+        });
+
+        // Sử dụng Fetch API để gửi yêu cầu AJAX đến endpoint API
+        fetch("http://127.0.0.1:8000/api/phones?format=api")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Lỗi khi gửi yêu cầu AJAX");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Xử lý dữ liệu nhận được
+            if (data && data.length > 0) {
+              var phoneListHtml = "<h2>Danh sách điện thoại</h2><ul>";
+              data.forEach((phone) => {
+                phoneListHtml += `<li><strong>Tên:</strong> ${phone.name}, <strong>Số điện thoại:</strong> ${phone.phoneNumber}</li>`;
+              });
+              phoneListHtml += "</ul>";
+              document.getElementById("phoneList").innerHTML = phoneListHtml;
+            } else {
+              document.getElementById("phoneList").innerHTML =
+                "<p>Không có dữ liệu</p>";
+            }
+          })
+          .catch((error) => {
+            console.error("Lỗi khi gửi yêu cầu AJAX:", error);
+            document.getElementById("phoneList").innerHTML =
+              "<p>Có lỗi xảy ra khi lấy dữ liệu</p>";
+          });
+      });
+    </script>
+  </body>
+</html>
