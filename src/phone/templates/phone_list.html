@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -18,7 +19,7 @@
         }
 
         body {
-          background: url("{% static 'img\todo_2_bg.jpg' %}");
+          background: url("{% static 'img/todo_2_bg.jpg' %}");
           background-position: center;
           background-size: cover;
           font-family: "Roboto", sans-serif;
@@ -29,7 +30,6 @@
           transition: background-image 0.5s ease-in-out;
         }
         
-
         .container {
           width: 400px;
           height: auto;
@@ -243,13 +243,16 @@
                                   </div>`;
               });
               document.getElementById("phoneList").innerHTML = phoneListHtml;
+              updateContainerHeight()
             } else {
               document.getElementById("phoneList").innerHTML = "<p>Không có dữ liệu</p>";
+              updateContainerHeight()
             }
           })
           .catch(error => {
             console.error("Lỗi khi gửi yêu cầu AJAX:", error);
             document.getElementById("phoneList").innerHTML = "<p>Có lỗi xảy ra khi lấy dữ liệu</p>";
+            updateContainerHeight()
           });
       }
       
@@ -257,7 +260,7 @@
         const phoneList = document.getElementById("phoneList");
         const container = document.querySelector(".container");
         const phoneListHeight = phoneList.offsetHeight;
-        const containerPadding = 400; // Tổng padding (30px top + 30px bottom)
+        const containerPadding = 500; // Tổng padding (30px top + 30px bottom)
         container.style.minHeight = `${phoneListHeight + containerPadding}px`;
       }
       // Gọi hàm để cập nhật danh sách khi trang được tải
