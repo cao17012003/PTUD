@@ -25,6 +25,7 @@
           justify-content: center;
           background: #222; /* Màu nền tối */
         }
+        
 
         .container {
           width: 400px;
@@ -119,11 +120,17 @@
         <input class="todo-input" id="nameInput" name="name" placeholder="Nhập tên...">
       </div>
       <div class="input-container">
-        <input class="todo-input" id="phoneInput" name="phoneNumber" placeholder="Nhập số điện thoại...">
+        <input class="todo-input" id="phoneInput" name="phoneNumber" placeholder="Nhập số điện thoại..."style="color: white;">
       </div>
       <div class="input-container">
         <button type="submit" class="add-button">
           <i class="fa fa-plus-circle"></i>
+        </button>
+      </div>
+      <div class = "input-container" >
+        <input class="todo-input" id="phoneDeleteInput" placeholder="Nhập số điện thoại cần xóa...">
+        <button id="deleteButton" class="add-button">
+          <i class="fa fa-trash"></i>
         </button>
       </div>
     </form>
@@ -190,7 +197,30 @@
       // Gọi hàm để cập nhật danh sách khi trang được tải
       updatePhoneList();
     });
+
+    document.getElementById("deleteButton").addEventListener("click", function() {
+      const phoneToDelete = document.getElementById("phoneDeleteInput").value;
+      if (!phoneToDelete) {
+        alert("Vui lòng nhập số điện thoại cần xóa!");
+        return;
+      }
+      deletePhone(phoneToDelete);
+    });
+    
+    function deletePhone(phoneNumber) {
+      fetch(`http://127.0.0.1:8000/api/phones/${phoneNumber}`, {
+        method: "DELETE"
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Lỗi khi gửi yêu cầu DELETE");
+        }
+        console.log("Số điện thoại đã được xóa thành công");
+        updatePhoneList(); // Sau khi xóa thành công, cập nhật lại danh sách điện thoại
+      })
+      .catch(error => console.error("Lỗi khi gửi yêu cầu DELETE:", error));
+    }
+    
   </script>
 </body>
 </html>
-
