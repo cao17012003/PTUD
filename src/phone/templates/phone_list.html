@@ -177,13 +177,13 @@
         </button>
       </div>
       <div class = "input-container" >
-        <input class="todo-input" id="phoneDeleteInput" placeholder="Nhập số thứ tự số  điện thoại cần xóa...">
+        <input class="todo-input" id="phoneDeleteInput" placeholder="Nhập tên cần xóa...">
         <button id="deleteButton" class="add-button">
           <i class="fa fa-trash"></i>
         </button>
       </div>
       <div class="input-container">
-        <input class="todo-input" id="phoneEditInput" placeholder="Nhập số thứ tự số thứ tự điện thoại cần chỉnh sửa...">
+        <input class="todo-input" id="phoneEditInput" placeholder="Nhập tên cần sửa...">
     </div>
     <div class="input-container">
       <input class="todo-input" id="nameEditInput" placeholder="Nhập tên mới...">
@@ -290,33 +290,6 @@
       .catch(error => console.error("Lỗi khi gửi yêu cầu DELETE:", error));
     }
 
-    // Hàm chỉnh sửa tên điện thoại
-    function editPhone(phoneNumber) {
-      const newName = document.getElementById("nameEditInput").value;
-      const newPhoneNumber = document.getElementById("phoneInput").value; // Đổi thành lấy giá trị từ input số điện thoại mới
-
-      if (!newName || !newPhoneNumber) {
-          alert("Vui lòng nhập tên và số điện thoại mới!");
-          return;
-      }
-
-      const formData = new FormData();
-      formData.append("name", newName);
-      formData.append("phoneNumber", newPhoneNumber); // Sử dụng số điện thoại mới thay vì lấy từ input chỉnh sửa
-
-      fetch(`http://127.0.0.1:8000/api/phones/${phoneNumber}`, {
-              method: "PUT",
-              body: formData
-          })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error("Lỗi khi gửi yêu cầu PUT");
-              }
-              console.log("Số điện thoại đã được chỉnh sửa thành công");
-              updatePhoneList(); // Sau khi chỉnh sửa thành công, cập nhật lại danh sách điện thoại
-          })
-          .catch(error => console.error("Lỗi khi gửi yêu cầu PUT:", error));
-    }
     // Sự kiện click nút chỉnh sửa
     document.getElementById("editButton").addEventListener("click", function () {
       const phoneToEdit = document.getElementById("phoneEditInput").value;
