@@ -289,16 +289,6 @@
       })
       .catch(error => console.error("Lỗi khi gửi yêu cầu DELETE:", error));
     }
-    
-    // Sự kiện click nút chỉnh sửa
-    document.getElementById("editButton").addEventListener("click", function () {
-      const phoneToEdit = document.getElementById("phoneEditInput").value;
-      if (!phoneToEdit) {
-          alert("Vui lòng nhập số điện thoại cần chỉnh sửa!");
-          return;
-      }
-      editPhone(phoneToEdit);
-    });
 
     // Hàm chỉnh sửa tên điện thoại
     function editPhone(phoneNumber) {
